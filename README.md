@@ -1,6 +1,3 @@
-Sure! Below is a sample README file with instructions on how to set up and run the application locally.
-
----
 
 # Quiz App
 
