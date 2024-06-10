@@ -1,33 +1,24 @@
-import { useSession, signIn, signOut } from 'next-auth/react'
-import Quiz from '../components/Quiz'
-import ThemeToggle from '../components/ThemeToggle'
+import { useContext } from 'react';
+import ThemeContext from '../context/ThemeContext';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Quiz from '../components/Quiz';
 
 export default function Home() {
-  const { data: session } = useSession()
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { data: session } = useSession();
 
   return (
-    <div className="container mx-auto p-4">
-      <ThemeToggle />
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Quiz Application</h1>
-        {session ? (
-          <div className="flex items-center space-x-4">
-            <img src={session.user.image} alt={session.user.name} className="w-10 h-10 rounded-full" />
-            <div>
-              <h2 className="text-xl font-semibold">Welcome, {session.user.name}</h2>
-              <button onClick={() => signOut()} className="btn mt-2">Sign out</button>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <h2 className="text-xl font-semibold">Please sign in to take the quiz</h2>
-            <button onClick={() => signIn('google')} className="btn mt-2">Sign in with Google</button>
-          </div>
-        )}
+    <div className={`min-h-screen flex flex-col items-center justify-center ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+      <header className="w-full p-5 flex justify-between items-center">
+        <div className="flex items-center space-x-4">
+
+        </div>
       </header>
-      {session && <Quiz />}
+      <main className="flex-1 w-full flex items-center justify-center">
+        {session ? <Quiz /> : <div>Please sign in to take the quiz.</div>}
+      </main>
     </div>
-  )
+  );
 }
 
 
