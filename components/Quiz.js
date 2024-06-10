@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const questions = [
   {
@@ -59,6 +60,21 @@ const Quiz = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev === 1) {
+          clearInterval(timer);
+          handleNextQuestion();
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [currentQuestion]);
 
   const handleOptionClick = (option) => {
     if (selectedOption === null) {
@@ -74,14 +90,15 @@ const Quiz = () => {
   };
 
   const handleNextQuestion = () => {
-    setSelectedOption(null);
-    setShowFeedback(false);
-    setIsCorrect(false);
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+      setSelectedOption(null);
+      setShowFeedback(false);
+      setIsCorrect(false);
+      setCurrentQuestion((prev) => prev + 1);
+      setTimeLeft(60);
     } else {
-      setCurrentQuestion(0);
-      setScore(0);
+      // Quiz completed
+      setShowFeedback(false);
     }
   };
 
@@ -91,71 +108,120 @@ const Quiz = () => {
     setSelectedOption(null);
     setShowFeedback(false);
     setIsCorrect(false);
+    setTimeLeft(60);
   };
 
   return (
     <div className="w-full max-w-xl p-5 bg-white dark:bg-gray-700 rounded shadow-md">
-      {currentQuestion < questions.length ? (
-        <>
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold mb-2">
-              {questions[currentQuestion].question}
-            </h2>
-            <ul>
-              {questions[currentQuestion].options.map((option, index) => (
-                <li key={index} className="mb-2">
-                  <button
-                    onClick={() => handleOptionClick(option)}
-                    disabled={selectedOption !== null}
-                    className={`w-full p-2 border rounded ${
-                      selectedOption === option
-                        ? isCorrect
-                          ? 'bg-green-500 text-white'
-                          : 'bg-red-500 text-white'
-                        : 'bg-gray-200'
-                    }`}
-                  >
-                    {option}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {showFeedback && (
-            <div className="mb-4">
-              {isCorrect ? (
-                <p className="text-green-500">Correct!</p>
-              ) : (
-                <p className="text-red-500">
-                  Incorrect! The correct answer is {questions[currentQuestion].answer}.
-                </p>
-              )}
-            </div>
-          )}
-          {showFeedback && (
-            <button
-              onClick={handleNextQuestion}
-              className="p-2 bg-blue-500 text-white rounded"
-            >
-              {currentQuestion < questions.length - 1 ? 'Next Question' : 'Restart Quiz'}
-            </button>
-          )}
-        </>
-      ) : (
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Quiz Complete!</h2>
-          <p className="text-lg">Your score is {score} out of {questions.length}</p>
-          <button
-            onClick={handleRestartQuiz}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+      <AnimatePresence exitBeforeEnter>
+        {currentQuestion < questions.length ? (
+          <motion.div
+            key={currentQuestion}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.5 }}
           >
-            Try Again
-          </button>
-        </div>
-      )}
+            <div className="mb-4">
+              <motion.h2
+                className="text-2xl font-bold mb-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                {questions[currentQuestion].question}
+              </motion.h2>
+              <div className="mb-4">
+                <p className="text-lg">Time left: {timeLeft} seconds</p>
+              </div>
+              <ul>
+                {questions[currentQuestion].options.map((option, index) => (
+                  <motion.li
+                    key={index}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="mb-2"
+                  >
+                    <button
+                      onClick={() => handleOptionClick(option)}
+                      disabled={selectedOption !== null}
+                      className={`w-full p-2 border rounded ${
+                        selectedOption === option
+                          ? isCorrect
+                            ? 'bg-green-500 text-white'
+                            : 'bg-red-500 text-white'
+                          : 'bg-gray-200'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+            {showFeedback && (
+              <motion.div
+                className="mb-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                {isCorrect ? (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-green-500"
+                  >
+                    Correct!
+                  </motion.p>
+                ) : (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-red-500"
+                  >
+                    Incorrect! The correct answer is {questions[currentQuestion].answer}.
+                  </motion.p>
+                )}
+              </motion.div>
+            )}
+            {showFeedback && (
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                onClick={handleNextQuestion}
+                className="p-2 bg-blue-500 text-white rounded"
+              >
+                {currentQuestion < questions.length - 1 ? 'Next Question' : 'Restart Quiz'}
+              </motion.button>
+            )}
+          </motion.div>
+        ) : (
+          <motion.div
+            key="quiz-complete"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
+            <h2 className="text-2xl font-bold mb-4">Quiz Complete!</h2>
+            <p className="text-lg">
+              Your score is {score} out of {questions.length}
+            </p>
+            <button
+              onClick={handleRestartQuiz}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              Try Again
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
 export default Quiz;
-
