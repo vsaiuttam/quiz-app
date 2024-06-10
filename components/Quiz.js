@@ -61,6 +61,7 @@ const Quiz = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
   const [userAnswers, setUserAnswers] = useState([]);
+  const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -117,60 +118,16 @@ const Quiz = () => {
     setIsCorrect(false);
     setTimeLeft(60);
     setUserAnswers([]);
+    setShowResults(false);
+  };
+
+  const handleShowResults = () => {
+    setShowResults(true);
   };
 
   return (
     <div className="w-full max-w-xl p-5 bg-white dark:bg-gray-700 rounded shadow-md">
-      {currentQuestion < questions.length ? (
-        <>
-          <div className="mb-4 text-center">
-            <div className="text-lg font-bold p-2 border rounded bg-blue-100 text-blue-800">
-              Time left: {timeLeft} seconds
-            </div>
-          </div>
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold mb-2">
-              {questions[currentQuestion].question}
-            </h2>
-            <ul>
-              {questions[currentQuestion].options.map((option, index) => (
-                <li key={index} className="mb-2">
-                  <button
-                    onClick={() => handleOptionClick(option)}
-                    disabled={selectedOption !== null}
-                    className={`w-full p-2 border rounded ${
-                      selectedOption === option
-                        ? isCorrect
-                          ? 'bg-green-500 text-white'
-                          : 'bg-red-500 text-white'
-                        : 'bg-gray-200'
-                    }`}
-                  >
-                    {option}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {showFeedback && (
-            <div className="mb-4">
-              {isCorrect ? (
-                <p className="text-green-500">Correct!</p>
-              ) : (
-                <p className="text-red-500">Incorrect!</p>
-              )}
-            </div>
-          )}
-          {showFeedback && (
-            <button
-              onClick={handleNextQuestion}
-              className="p-2 bg-blue-500 text-white rounded"
-            >
-              Next Question
-            </button>
-          )}
-        </>
-      ) : (
+      {showResults ? (
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Quiz Complete!</h2>
           <p className="text-lg">
@@ -206,6 +163,59 @@ const Quiz = () => {
             </ul>
           </div>
         </div>
+      ) : (
+        <>
+          {currentQuestion < questions.length ? (
+            <>
+              <div className="mb-4 text-center">
+                <div className="text-lg font-bold p-2 border rounded bg-blue-100 text-blue-800">
+                  Time left: {timeLeft} seconds
+                </div>
+              </div>
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold mb-2">
+                  {questions[currentQuestion].question}
+                </h2>
+                <ul>
+                  {questions[currentQuestion].options.map((option, index) => (
+                    <li key={index} className="mb-2">
+                      <button
+                        onClick={() => handleOptionClick(option)}
+                        disabled={selectedOption !== null}
+                        className={`w-full p-2 border rounded ${
+                          selectedOption === option
+                            ? isCorrect
+                              ? 'bg-green-500 text-white'
+                              : 'bg-red-500 text-white'
+                            : 'bg-gray-200'
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {showFeedback && (
+                <button
+                  onClick={handleNextQuestion}
+                  className="p-2 bg-blue-500 text-white rounded"
+                >
+                  Next Question
+                </button>
+              )}
+            </>
+          ) : (
+            <div className="text-center">
+              <button
+                onClick={handleShowResults}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Show Results
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
