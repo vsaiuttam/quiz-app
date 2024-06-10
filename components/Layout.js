@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
   const { data: session } = useSession();
 
   return (
-    <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-black  text-black'}`}>
+    <div className={`min-h-screen flex flex-col ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
       <header className="w-full p-5 flex justify-between items-center">
         <h1 className="text-2xl font-bold">Quiz App</h1>
         <div className="flex items-center space-x-4">
