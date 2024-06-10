@@ -61,14 +61,15 @@ const Quiz = () => {
   const [isCorrect, setIsCorrect] = useState(false);
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    setShowFeedback(true);
-
-    if (option === questions[currentQuestion].answer) {
-      setIsCorrect(true);
-      setScore(score + 1);
-    } else {
-      setIsCorrect(false);
+    if (selectedOption === null) {
+      setSelectedOption(option);
+      setShowFeedback(true);
+      if (option === questions[currentQuestion].answer) {
+        setIsCorrect(true);
+        setScore(score + 1);
+      } else {
+        setIsCorrect(false);
+      }
     }
   };
 
@@ -76,7 +77,20 @@ const Quiz = () => {
     setSelectedOption(null);
     setShowFeedback(false);
     setIsCorrect(false);
-    setCurrentQuestion(currentQuestion + 1);
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setCurrentQuestion(0);
+      setScore(0);
+    }
+  };
+
+  const handleRestartQuiz = () => {
+    setCurrentQuestion(0);
+    setScore(0);
+    setSelectedOption(null);
+    setShowFeedback(false);
+    setIsCorrect(false);
   };
 
   return (
@@ -92,6 +106,7 @@ const Quiz = () => {
                 <li key={index} className="mb-2">
                   <button
                     onClick={() => handleOptionClick(option)}
+                    disabled={selectedOption !== null}
                     className={`w-full p-2 border rounded ${
                       selectedOption === option
                         ? isCorrect
@@ -122,14 +137,20 @@ const Quiz = () => {
               onClick={handleNextQuestion}
               className="p-2 bg-blue-500 text-white rounded"
             >
-              Next Question
+              {currentQuestion < questions.length - 1 ? 'Next Question' : 'Restart Quiz'}
             </button>
           )}
         </>
       ) : (
-        <div>
+        <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Quiz Complete!</h2>
           <p className="text-lg">Your score is {score} out of {questions.length}</p>
+          <button
+            onClick={handleRestartQuiz}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Try Again
+          </button>
         </div>
       )}
     </div>
@@ -137,3 +158,4 @@ const Quiz = () => {
 };
 
 export default Quiz;
+
