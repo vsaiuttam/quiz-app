@@ -106,7 +106,7 @@ const Quiz = () => {
       setCurrentQuestion((prev) => prev + 1);
       setTimeLeft(60);
     } else {
-      setShowFeedback(false);
+      setShowResults(true);
     }
   };
 
@@ -119,10 +119,6 @@ const Quiz = () => {
     setTimeLeft(60);
     setUserAnswers([]);
     setShowResults(false);
-  };
-
-  const handleShowResults = () => {
-    setShowResults(true);
   };
 
   return (
@@ -201,14 +197,14 @@ const Quiz = () => {
                   onClick={handleNextQuestion}
                   className="p-2 bg-blue-500 text-white rounded"
                 >
-                  Next Question
+                  {currentQuestion < questions.length - 1 ? 'Next Question' : 'Show Results'}
                 </button>
               )}
             </>
           ) : (
             <div className="text-center">
               <button
-                onClick={handleShowResults}
+                onClick={() => setShowResults(true)}
                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
               >
                 Show Results
