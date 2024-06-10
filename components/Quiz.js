@@ -60,6 +60,7 @@ const Quiz = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [userAnswers, setUserAnswers] = useState([]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -79,11 +80,14 @@ const Quiz = () => {
     if (selectedOption === null) {
       setSelectedOption(option);
       setShowFeedback(true);
-      if (option === questions[currentQuestion].answer) {
-        setIsCorrect(true);
+      const correct = option === questions[currentQuestion].answer;
+      setIsCorrect(correct);
+      setUserAnswers([
+        ...userAnswers,
+        { question: questions[currentQuestion].question, selectedOption: option, isCorrect: correct },
+      ]);
+      if (correct) {
         setScore(score + 1);
-      } else {
-        setIsCorrect(false);
       }
     }
   };
@@ -108,6 +112,7 @@ const Quiz = () => {
     setShowFeedback(false);
     setIsCorrect(false);
     setTimeLeft(60);
+    setUserAnswers([]);
   };
 
   return (
@@ -148,9 +153,7 @@ const Quiz = () => {
               {isCorrect ? (
                 <p className="text-green-500">Correct!</p>
               ) : (
-                <p className="text-red-500">
-                  Incorrect! The correct answer is {questions[currentQuestion].answer}.
-                </p>
+                <p className="text-red-500">Incorrect!</p>
               )}
             </div>
           )}
@@ -175,6 +178,29 @@ const Quiz = () => {
           >
             Try Again
           </button>
+          <div className="mt-4">
+            <h3 className="text-xl font-bold mb-2">Review your answers:</h3>
+            <ul>
+              {userAnswers.map((answer, index) => (
+                <li key={index} className="mb-2">
+                  <p>{answer.question}</p>
+                  <p>
+                    Your answer:{" "}
+                    <span
+                      className={
+                        answer.isCorrect ? "text-green-500" : "text-red-500"
+                      }
+                    >
+                      {answer.selectedOption}
+                    </span>
+                  </p>
+                  {!answer.isCorrect && (
+                    <p>Correct answer: {questions[index].answer}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
     </div>
