@@ -84,7 +84,7 @@ const Quiz = () => {
       setIsCorrect(correct);
       setUserAnswers([
         ...userAnswers,
-        { question: questions[currentQuestion].question, selectedOption: option, isCorrect: correct },
+        { question: questions[currentQuestion].question, selectedOption: option, isCorrect: correct, correctAnswer: questions[currentQuestion].answer },
       ]);
       if (correct) {
         setScore(score + 1);
@@ -100,7 +100,6 @@ const Quiz = () => {
       setCurrentQuestion((prev) => prev + 1);
       setTimeLeft(60);
     } else {
-      // Quiz completed
       setShowFeedback(false);
     }
   };
@@ -183,9 +182,9 @@ const Quiz = () => {
             <ul>
               {userAnswers.map((answer, index) => (
                 <li key={index} className="mb-2">
-                  <p>{answer.question}</p>
+                  <p><strong>Question:</strong> {answer.question}</p>
                   <p>
-                    Your answer:{" "}
+                    <strong>Your answer:</strong>{" "}
                     <span
                       className={
                         answer.isCorrect ? "text-green-500" : "text-red-500"
@@ -195,7 +194,7 @@ const Quiz = () => {
                     </span>
                   </p>
                   {!answer.isCorrect && (
-                    <p>Correct answer: {questions[index].answer}</p>
+                    <p><strong>Correct answer:</strong> {answer.correctAnswer}</p>
                   )}
                 </li>
               ))}
