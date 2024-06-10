@@ -62,23 +62,26 @@ const Quiz = () => {
   const [timeLeft, setTimeLeft] = useState(60);
   const [userAnswers, setUserAnswers] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const [timerInterval, setTimerInterval] = useState(null);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev === 1) {
-          clearInterval(timer);
-          handleNextQuestion();
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
+    if (currentQuestion < questions.length) {
+      const interval = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev === 1) {
+            clearInterval(interval);
+            handleNextQuestion();
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      setTimerInterval(interval);
+    }
   }, [currentQuestion]);
 
   const handleOptionClick = (option) => {
     if (selectedOption === null) {
+      clearInterval(timerInterval); // Stop the timer
       setSelectedOption(option);
       setShowFeedback(true);
       const correct = option === questions[currentQuestion].answer;
