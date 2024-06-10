@@ -84,7 +84,12 @@ const Quiz = () => {
       setIsCorrect(correct);
       setUserAnswers([
         ...userAnswers,
-        { question: questions[currentQuestion].question, selectedOption: option, isCorrect: correct, correctAnswer: questions[currentQuestion].answer },
+        {
+          question: questions[currentQuestion].question,
+          selectedOption: option,
+          isCorrect: correct,
+          correctAnswer: questions[currentQuestion].answer,
+        },
       ]);
       if (correct) {
         setScore(score + 1);
