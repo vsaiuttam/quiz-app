@@ -134,11 +134,11 @@ const Quiz = () => {
           </p>
           <button
             onClick={handleRestartQuiz}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
           >
             Try Again
           </button>
-          <div className="mt-4">
+          <div className="mt-4 text-left">
             <h3 className="text-xl font-bold mb-2">Review your answers:</h3>
             <ul>
               {userAnswers.map((answer, index) => (
@@ -187,7 +187,7 @@ const Quiz = () => {
                               ? 'bg-green-500 text-white'
                               : 'bg-red-500 text-white'
                             : 'bg-gray-200'
-                        }`}
+                        } transition-all duration-300 hover:bg-gray-300`}
                       >
                         {option}
                       </button>
@@ -198,7 +198,7 @@ const Quiz = () => {
               {showFeedback && (
                 <button
                   onClick={handleNextQuestion}
-                  className="p-2 bg-blue-500 text-white rounded"
+                  className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
                 >
                   {currentQuestion < questions.length - 1 ? 'Next Question' : 'Show Results'}
                 </button>
@@ -208,7 +208,7 @@ const Quiz = () => {
             <div className="text-center">
               <button
                 onClick={() => setShowResults(true)}
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
               >
                 Show Results
               </button>
@@ -221,3 +221,4 @@ const Quiz = () => {
 };
 
 export default Quiz;
+
