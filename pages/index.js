@@ -15,8 +15,8 @@ export default function Home() {
         ) : (
           <div className="text-center">
             <div className="text-3xl font-bold mb-2">📝 Please sign in to take the quiz! 🖋️</div>
-            <div className="text-lg">👉 Click the button below to sign in with Google. 👈</div>
-            <button onClick={() => signIn('google')} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Sign in with Google</button>
+            
+           
           </div>
         )}
       </main>
