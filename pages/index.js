@@ -14,7 +14,7 @@ export default function Home() {
           <Quiz />
         ) : (
           <div className="text-center">
-            <img src="/path-to-your-image.jpg" alt="Sign in" className="mb-4 w-48 h-48 object-cover" />
+            <img src="../images/png.png" alt="Sign in" className="mb-4 w-48 h-48 object-cover" />
             <div className="text-lg">Please sign in to take the quiz.</div>
           </div>
         )}
