@@ -53,7 +53,6 @@ const questions = [
     answer: "George Orwell",
   },
 ];
-
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -241,4 +240,3 @@ const Quiz = () => {
 };
 
 export default Quiz;
-
