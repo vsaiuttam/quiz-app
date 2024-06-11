@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 const questions = [
   {
@@ -53,6 +52,7 @@ const questions = [
     answer: "George Orwell",
   },
 ];
+
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -63,22 +63,6 @@ const Quiz = () => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [timerInterval, setTimerInterval] = useState(null);
-  const [quote, setQuote] = useState('');
-
-  useEffect(() => {
-    fetchQuote(); // Fetch a quote initially
-    const quoteInterval = setInterval(fetchQuote, 60000); // Fetch a new quote every minute
-    return () => clearInterval(quoteInterval);
-  }, []);
-
-  const fetchQuote = async () => {
-    try {
-      const response = await axios.get('https://api.quotable.io/random');
-      setQuote(response.data.content);
-    } catch (error) {
-      console.error('Error fetching quote:', error);
-    }
-  };
 
   useEffect(() => {
     if (currentQuestion < questions.length) {
@@ -185,9 +169,6 @@ const Quiz = () => {
               <div className="mb-4 text-center">
                 <div className="text-lg font-bold p-2 border rounded bg-blue-100 text-blue-800">
                   Time left: {timeLeft} seconds
-                </div>
-                <div className="text-lg font-bold p-2 border rounded bg-yellow-100 text-yellow-800 mt-4">
-                  Quote: {quote}
                 </div>
               </div>
               <div className="mb-4">
