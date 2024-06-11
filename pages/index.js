@@ -14,8 +14,9 @@ export default function Home() {
           <Quiz />
         ) : (
           <div className="text-center">
-            <img src="/quiz-app/public/images/png.png" alt="404" className="mb-4 w-48 h-48 object-cover" />
-            <div className="text-lg">Please sign in to take the quiz.</div>
+            <div className="text-3xl font-bold mb-2">📝 Please sign in to take the quiz! 🖋️</div>
+            <div className="text-lg">👉 Click the button below to sign in with Google. 👈</div>
+            <button onClick={() => signIn('google')} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Sign in with Google</button>
           </div>
         )}
       </main>
